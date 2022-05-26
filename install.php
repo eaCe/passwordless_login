@@ -1,4 +1,5 @@
 <?php
+/** @var rex_addon $this */
 
 try {
     \rex_config::set($this->getName(), 'key', bin2hex(random_bytes(40)));

@@ -24,6 +24,16 @@ class PasswordLessLogin extends rex_backend_login
     }
 
     /**
+     * check if route current path is a route
+     *
+     * @param string $route
+     * @return bool
+     */
+    private static function isRoute(string $route): bool {
+        return mb_substr(self::getCurrentPath(), 1, mb_strlen($route)) === $route;
+    }
+
+    /**
      * handle form submit
      *
      * @return void
@@ -33,7 +43,7 @@ class PasswordLessLogin extends rex_backend_login
      * @throws rex_sql_exception
      */
     public static function handleSubmit(): void {
-        if (mb_substr(self::getCurrentPath(), 1, mb_strlen(self::$route)) === self::$route) {
+        if (self::isRoute(self::$route)) {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
                 throw new rex_http_exception(new rex_exception('Request-Method not allowed'), 405);
             }
@@ -75,13 +85,12 @@ class PasswordLessLogin extends rex_backend_login
      * @throws rex_sql_exception
      */
     public static function handleLogin(): void {
-
         /** return early if user is logged in */
         if (rex::getUser()) {
             return;
         }
 
-        if (mb_substr(self::getCurrentPath(), 1, mb_strlen(self::$loginRoute)) === self::$loginRoute) {
+        if (self::isRoute(self::$loginRoute)) {
             if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
                 throw new rex_http_exception(new rex_exception('Request-Method not allowed'), 405);
             }
@@ -187,10 +196,10 @@ class PasswordLessLogin extends rex_backend_login
 
         $user = rex_user::get((int)$entry['user_id']);
         $mailer = new rex_mailer();
-        $mailer->Subject = rex::getServerName() . ' - error report ';
+        $mailer->Subject = rex::getServerName();
         $mailer->Body = $mailBody;
         $mailer->AltBody = strip_tags($mailBody);
-        $mailer->FromName = 'REDAXO';
+        $mailer->FromName = rex::getServerName();
         $mailer->addAddress($user->getEmail());
         $mailer->Send();
 
