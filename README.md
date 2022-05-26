@@ -17,5 +17,8 @@ Im REDAXO-Installer das Addon `passwordless_login` herunterladen und installiere
 
 ## Autor
 
-**Thorben**  
+**eaCe**  
 https://github.com/eaCe
+
+**Alexander Walther**  
+https://github.com/alxndr-w
