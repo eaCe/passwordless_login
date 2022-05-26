@@ -1,0 +1,23 @@
+package: passwordless_login
+version: '0.0.1-dev'
+author: eaCe
+supportpage: https://github.com/eaCe/passwordless_login
+
+requires:
+    packages:
+        phpmailer: '^2.0.0'
+    redaxo: '^5.12.0'
+    php:
+        version: '>=7.4'
+
+installer_ignore:
+    - node_modules
+    - .git
+    - .gitignore
+    - .github
+    - package.json
+    - yarn.lock
+    - resources
+    - .editorconfig
+    - .eslintrc.js
+    - .stylelintrc.js
