@@ -12,6 +12,8 @@ Der Link ist eine Stunde valide, danach verfällt dieser.
 
 **User müssen zuvor mit einer E-Mail-Adresse angelegt worden sein.**
 
+Die beiden Routen können über die Eps `PLL_ROUTE` und `PLL_LOGIN_ROUTE` angepasst werden.
+
 ### Warum?
 
 Das Addon wurde entwickelt, um Nutzer*innen eine einfache Möglichkeit zu bieten sich in einem internen Bereich anzumelden.
