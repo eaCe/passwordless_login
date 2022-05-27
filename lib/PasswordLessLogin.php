@@ -30,7 +30,7 @@ class PasswordLessLogin extends rex_backend_login
      * @return bool
      */
     private static function isRoute(string $route): bool {
-        return mb_substr(self::getCurrentPath(), 1, mb_strlen($route)) === $route;
+        return str_replace('/', '', self::getCurrentPath()) === $route;
     }
 
     /**
@@ -96,9 +96,14 @@ class PasswordLessLogin extends rex_backend_login
             }
 
             $hash = rex_get('hash', 'string');
+            $secret = rex_get('secret', 'string');
 
             if ('' === $hash) {
                 throw new rex_http_exception(new rex_exception('Hash missing'), 400);
+            }
+
+            if ('' === $secret) {
+                throw new rex_http_exception(new rex_exception('Secret missing'), 400);
             }
 
             $sql = rex_sql::factory();
@@ -109,6 +114,7 @@ class PasswordLessLogin extends rex_backend_login
             if ($sql->getRows()) {
                 $entry = $sql->getArray()[0];
                 self::checkExpiration($entry);
+                self::checkSecret($secret);
                 self::login($entry);
             }
         }
@@ -153,11 +159,38 @@ class PasswordLessLogin extends rex_backend_login
      * @return void
      * @throws rex_exception
      */
-    private static function checkExpiration(array $entry) {
+    private static function checkExpiration(array $entry): void {
         if (strtotime($entry['expiration']) <= time()) {
-            // TODO: remove hash from db..
+            self::deleteEntry($entry);
             throw new rex_exception('Hash expired');
         }
+    }
+
+    /**
+     * check the given secret
+     *
+     * @param string $secret
+     * @return void
+     * @throws rex_exception
+     */
+    private static function checkSecret(string $secret): void {
+        $addonSecret = rex_addon::get('passwordless_login')->getProperty('secret');
+
+        if ($secret !== $addonSecret) {
+            throw new rex_exception('Wrong secret provided');
+        }
+    }
+
+    /**
+     * @param array $entry
+     * @return void
+     * @throws rex_sql_exception
+     */
+    private static function deleteEntry(array $entry): void {
+        $sql = rex_sql::factory();
+        $sql->setTable(rex::getTable(self::$table));
+        $sql->setWhere('hash = :hash', ['hash' => $entry['hash']]);
+        $sql->delete();
     }
 
     /**
@@ -177,7 +210,20 @@ class PasswordLessLogin extends rex_backend_login
         $_SESSION[static::getSessionNamespace()]['backend_login']['STAMP'] = time();
         $params = [rex_sql::datetime(), rex_sql::datetime(), session_id(), $user->getLogin()];
         $sql->setQuery('UPDATE ' . rex::getTable('user') . ' SET login_tries=0, lasttrydate=?, lastlogin=?, session_id=? WHERE login=? LIMIT 1', $params);
+        self::deleteEntry($entry);
+        rex_response::sendRedirect(rex_url::backend());
         exit();
+    }
+
+    /**
+     * get the login url
+     *
+     * @param array $entry
+     * @return string
+     */
+    private static function getUrl(array $entry) {
+        $addonSecret = rex_addon::get('passwordless_login')->getProperty('secret');
+        return rex::getServer() . self::$loginRoute . '?' . http_build_query(['hash' => $entry['hash'], 'secret' => $addonSecret]);
     }
 
     /**
@@ -190,15 +236,14 @@ class PasswordLessLogin extends rex_backend_login
      */
     public static function sendMail(array $entry): void {
         $mailFragment = new rex_fragment();
-        $mailFragment->setVar('hash', $entry['hash'], false);
-        $mailFragment->setVar('route', self::$loginRoute, false);
+        $mailFragment->setVar('url', self::getUrl($entry), false);
         $mailBody = $mailFragment->parse('pll-mail.php');
 
         $user = rex_user::get((int)$entry['user_id']);
         $mailer = new rex_mailer();
+        $mailer->isHTML(true);
         $mailer->Subject = rex::getServerName();
         $mailer->Body = $mailBody;
-        $mailer->AltBody = strip_tags($mailBody);
         $mailer->FromName = rex::getServerName();
         $mailer->addAddress($user->getEmail());
         $mailer->Send();
