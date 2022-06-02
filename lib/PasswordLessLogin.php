@@ -234,7 +234,7 @@ class PasswordLessLogin extends rex_backend_login
      * @throws \PHPMailer\PHPMailer\Exception
      * @throws rex_exception
      */
-    public static function sendMail(array $entry): void {
+    private static function sendMail(array $entry): void {
         $mailFragment = new rex_fragment();
         $mailFragment->setVar('url', self::getUrl($entry), false);
         $mailBody = $mailFragment->parse('pll-mail.php');
