@@ -1,11 +1,14 @@
 {
-    "require": {
-        "squizlabs/php_codesniffer": "*",
-        "overtrue/phplint": "^4.1"
-    },
-    "scripts": {
-        "lint": "phplint --no-cache lib",
-        "phpcs": "phpcs --extensions=php --standard=phpcs.xml lib",
-        "phpcbf": "phpcbf --extensions=php --standard=phpcs.xml lib"
-    }
+  "name": "eace/passwordless_login",
+  "description": "Passwordless login for REDAXO 5",
+  "license": "MIT",
+  "require": {
+    "squizlabs/php_codesniffer": "*",
+    "overtrue/phplint": "^4.1"
+  },
+  "scripts": {
+    "lint": "phplint --no-cache lib",
+    "phpcs": "phpcs --extensions=php --standard=phpcs.xml lib",
+    "phpcbf": "phpcbf --extensions=php --standard=phpcs.xml lib"
+  }
 }
