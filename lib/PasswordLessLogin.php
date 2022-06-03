@@ -201,7 +201,7 @@ class PasswordLessLogin extends rex_backend_login
      * @throws rex_exception
      */
     private static function login(array $entry): void {
-        $user = rex_user::get((int)$entry['user_id']);
+        $user = rex_user::get((int) $entry['user_id']);
         $sql = rex_sql::factory();
         self::startSession();
         self::regenerateSessionId();
@@ -239,7 +239,7 @@ class PasswordLessLogin extends rex_backend_login
         $mailFragment->setVar('url', self::getUrl($entry), false);
         $mailBody = $mailFragment->parse('pll-mail.php');
 
-        $user = rex_user::get((int)$entry['user_id']);
+        $user = rex_user::get((int) $entry['user_id']);
         $mailer = new rex_mailer();
         $mailer->isHTML(true);
         $mailer->Subject = rex::getServerName();
