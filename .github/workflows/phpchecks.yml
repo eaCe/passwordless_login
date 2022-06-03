@@ -36,5 +36,5 @@ jobs:
       - name: Run phpcs
         run: composer phpcs
 
-      - name: Run phpunit
-        run: composer test
+#      - name: Run phpunit
+#        run: composer test
