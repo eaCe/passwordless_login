@@ -19,3 +19,7 @@ installer_ignore:
     - .editorconfig
     - .eslintrc.js
     - .stylelintrc.js
+    - .stylelintrc.js
+    - composer.json
+    - composer.lock
+    - phpcs.xml
