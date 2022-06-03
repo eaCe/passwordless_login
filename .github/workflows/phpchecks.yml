@@ -11,8 +11,24 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: 'mariadb:10.1'
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: gd, intl, pdo_mysql
+          coverage: none # disable xdebug, pcov
 
       - name: Validate composer.json and composer.lock
         run: composer validate
@@ -29,6 +45,16 @@ jobs:
       - name: Install dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Setup Problem Matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Setup REDAXO
+        run: |
+          mysql -uroot -h127.0.0.1 -proot -e 'create database redaxo5;'
+          git apply .github/workflows/default.config.yml.github-action.diff
+          php .tools/bin/setup
+          redaxo/bin/console system:report
 
       - name: Run lint
         run: composer lint
