@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "928f3cee8e051c58583d59139113da84",
+    "content-hash": "06fec375b358c14abbc70bfe855c3191",
     "packages": [
         {
             "name": "n98/junit-xml",

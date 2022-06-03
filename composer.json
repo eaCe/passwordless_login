@@ -3,7 +3,7 @@
   "description": "Passwordless login for REDAXO 5",
   "license": "MIT",
   "require": {
-    "squizlabs/php_codesniffer": "*",
+    "squizlabs/php_codesniffer": "^3.6",
     "overtrue/phplint": "^4.1"
   },
   "scripts": {
