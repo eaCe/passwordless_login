@@ -5,6 +5,9 @@
   <!-- Show sniff codes in all reports -->
   <arg value="s"/>
 
+  <!-- Do not exit with error if there are only warnings -->
+  <config name="ignore_warnings_on_exit" value="1"/>
+
   <!-- Use PSR-2 as a base -->
   <rule ref="PSR2"/>
 

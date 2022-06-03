@@ -8,7 +8,7 @@
   },
   "scripts": {
     "lint": "phplint --no-cache lib",
-    "phpcs": "phpcs --extensions=php --standard=phpcs.xml lib --graceful-warnings",
+    "phpcs": "phpcs --extensions=php --standard=phpcs.xml lib",
     "phpcbf": "phpcbf --extensions=php --standard=phpcs.xml lib"
   }
 }
