@@ -56,18 +56,19 @@ jobs:
           php .tools/bin/setup
           vendor/redaxo/source/redaxo/bin/console system:report
 
+      # copy Addon files, ignore some directories...
       - name: Copy to Addons
         run: |
-          rsync -av --exclude='vendor' './' 'vendor/redaxo/source/redaxo/src/addons/passwordless_login' --dry-run
+          rsync -av --exclude='vendor' --exclude='.github' --exclude='.git' --exclude='.tools' './' 'vendor/redaxo/source/redaxo/src/addons/passwordless_login' --dry-run
 
       - name: Run lint
-        working-directory: ./vendor/redaxo/source/redaxo/src/addons/passwordless_login
+        working-directory: vendor/redaxo/source/redaxo/src/addons/passwordless_login
         run: composer lint
 
       - name: Run phpcs
-        working-directory: ./vendor/redaxo/source/redaxo/src/addons/passwordless_login
+        working-directory: vendor/redaxo/source/redaxo/src/addons/passwordless_login
         run: composer phpcs
 
       - name: Run phpunit
-        working-directory: ./vendor/redaxo/source/redaxo/src/addons/passwordless_login
+        working-directory: vendor/redaxo/source/redaxo/src/addons/passwordless_login
         run: composer test
