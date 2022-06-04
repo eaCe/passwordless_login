@@ -65,6 +65,11 @@ jobs:
           vendor/redaxo/source/redaxo/bin/console package:install 'phpmailer'
           vendor/redaxo/source/redaxo/bin/console package:install 'passwordless_login'
 
+      - name: Install test dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        working-directory: vendor/redaxo/source/redaxo/src/addons/passwordless_login
+        run: composer install --prefer-dist --no-progress --no-suggest
+
       - name: Run lint
         working-directory: vendor/redaxo/source/redaxo/src/addons/passwordless_login
         run: composer lint
