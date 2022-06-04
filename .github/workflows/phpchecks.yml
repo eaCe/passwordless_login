@@ -58,7 +58,7 @@ jobs:
 
       - name: Copy to Addons
         run: |
-          rsync -av --exclude='vendor' source 'vendor/redaxo/source/redaxo/src/addons/passwordless_login' --dry-run
+          rsync -av --exclude='vendor' './' 'vendor/redaxo/source/redaxo/src/addons/passwordless_login' --dry-run
 
       - name: Run lint
         working-directory: ./vendor/redaxo/source/redaxo/src/addons/passwordless_login
