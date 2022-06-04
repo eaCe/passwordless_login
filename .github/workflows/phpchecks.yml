@@ -59,7 +59,8 @@ jobs:
       # copy Addon files, ignore some directories...
       - name: Copy to Addons
         run: |
-          rsync -av --exclude='vendor' --exclude='.github' --exclude='.git' --exclude='.tools' './' 'vendor/redaxo/source/redaxo/src/addons/passwordless_login' --dry-run
+          rsync -av --exclude='vendor' --exclude='.github' --exclude='.git' --exclude='.tools' './' 'vendor/redaxo/source/redaxo/src/addons/passwordless_login'
+          vendor/redaxo/source/redaxo/bin/console package:install 'passwordless_login'
 
       - name: Run lint
         working-directory: vendor/redaxo/source/redaxo/src/addons/passwordless_login
