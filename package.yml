@@ -24,3 +24,4 @@ installer_ignore:
     - composer.lock
     - phpcs.xml
     - tests
+    - .tools
