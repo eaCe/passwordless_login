@@ -1,4 +1,4 @@
-# :construction: WIP Anmelden ohne Passwort für REDAXO 5
+# Anmelden ohne Passwort für REDAXO 5
 
 Dieses Addon ermöglicht, sich ohne Passwort in REDAXO einzuloggen. Dazu wird beim Login die Mail-Adresse eingegeben und ein Link angefordert. Der Zugang zum Mail-Postfach ersetzt die Authentifizierung über ein Passwort.
 
