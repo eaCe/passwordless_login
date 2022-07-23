@@ -14,8 +14,7 @@ index 2880a09e9..3485d830a 100644
  server: https://www.redaxo.org/
  servername: REDAXO
  error_email: null
-@@ -64,9 +64,9 @@
- table_prefix: rex_
+@@ -64,9 +64,9 @@ table_prefix: rex_
  temp_prefix: tmp_
  db:
      1:
