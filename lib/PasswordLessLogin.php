@@ -19,8 +19,18 @@ class PasswordLessLogin extends rex_backend_login
      * @return string
      */
     public static function getCurrentPath(): string {
-        $url = parse_url($_SERVER['REQUEST_URI']);
-        return $url['path'] ?? '';
+        $requestUri = filter_var($_SERVER["REQUEST_URI"], FILTER_SANITIZE_STRING);
+
+        if ($requestUri !== false) {
+            /** @var string[] */
+            $parts = parse_url($requestUri);
+
+            if (count($parts) !== 0) {
+                return $parts['path'];
+            }
+        }
+
+        return '';
     }
 
     /**
@@ -45,13 +55,13 @@ class PasswordLessLogin extends rex_backend_login
     public static function handleSubmit(): void {
         if (self::isRoute(self::$route)) {
             if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-                throw new rex_http_exception(new rex_exception('Request-Method not allowed'), 405);
+                throw new rex_http_exception(new rex_exception('Request-Method not allowed'), '405');
             }
 
             $email = rex_post('email', 'string');
 
             if ('' === $email) {
-                throw new rex_http_exception(new rex_exception('E-Mail missing'), 400);
+                throw new rex_http_exception(new rex_exception('E-Mail missing'), '400');
             }
 
             $sql = rex_sql::factory();
@@ -59,17 +69,16 @@ class PasswordLessLogin extends rex_backend_login
             $sql->setWhere('email = :email', ['email' => $email]);
             $sql->select('*');
 
-            if ($sql->getRows()) {
+            if ($sql->getRows() > 0) {
                 $user = $sql->getArray()[0];
 
                 self::removePreviousEntries($user);
                 $entryID = self::addEntry($user);
-                if ($entryID) {
+                if ($entryID !== 0) {
                     $sql = rex_sql::factory();
                     $sql->setTable(rex::getTable(self::$table));
                     $sql->setWhere('id = :id', ['id' => $entryID]);
                     $sql->select('*');
-                    rex_activity::message(json_encode($sql->getArray()[0]))->type(rex_activity::TYPE_INFO)->log();
                     self::sendMail($sql->getArray()[0]);
                 }
             }
@@ -86,24 +95,24 @@ class PasswordLessLogin extends rex_backend_login
      */
     public static function handleLogin(): void {
         /** return early if user is logged in */
-        if (rex::getUser()) {
+        if (rex::getUser() !== null) {
             return;
         }
 
         if (self::isRoute(self::$loginRoute)) {
             if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-                throw new rex_http_exception(new rex_exception('Request-Method not allowed'), 405);
+                throw new rex_http_exception(new rex_exception('Request-Method not allowed'), '405');
             }
 
             $hash = rex_get('hash', 'string');
             $secret = rex_get('secret', 'string');
 
             if ('' === $hash) {
-                throw new rex_http_exception(new rex_exception('Hash missing'), 400);
+                throw new rex_http_exception(new rex_exception('Hash missing'), '400');
             }
 
             if ('' === $secret) {
-                throw new rex_http_exception(new rex_exception('Secret missing'), 400);
+                throw new rex_http_exception(new rex_exception('Secret missing'), '400');
             }
 
             $sql = rex_sql::factory();
@@ -111,7 +120,7 @@ class PasswordLessLogin extends rex_backend_login
             $sql->setWhere('hash = :hash', ['hash' => $hash]);
             $sql->select('*');
 
-            if ($sql->getRows()) {
+            if ($sql->getRows() > 0) {
                 $entry = $sql->getArray()[0];
                 self::checkExpiration($entry);
                 self::checkSecret($secret);
@@ -125,7 +134,7 @@ class PasswordLessLogin extends rex_backend_login
     /**
      * remove previous user entries
      *
-     * @param array $user
+     * @param array<int|string, bool|float|int|string|null> $user
      * @return void
      * @throws rex_sql_exception
      */
@@ -139,7 +148,7 @@ class PasswordLessLogin extends rex_backend_login
     /**
      * add new user entry
      *
-     * @param array $user
+     * @param array<int|string, bool|float|int|string|null> $user
      * @return int
      * @throws rex_exception
      * @throws rex_sql_exception
@@ -151,16 +160,16 @@ class PasswordLessLogin extends rex_backend_login
         $sql->setValue('hash', self::getHash());
         $sql->setValue('expiration', date('Y-m-d H:i:s', time() + 3600));
         $sql->insert();
-        return $sql->getLastId();
+        return (int) $sql->getLastId();
     }
 
     /**
-     * @param array $entry
+     * @param array<int|string, bool|float|int|string|null> $entry
      * @return void
      * @throws rex_exception
      */
     private static function checkExpiration(array $entry): void {
-        if (strtotime($entry['expiration']) <= time()) {
+        if (strtotime((string) $entry['expiration']) <= time()) {
             self::deleteEntry($entry);
             throw new rex_exception('Hash expired');
         }
@@ -182,7 +191,7 @@ class PasswordLessLogin extends rex_backend_login
     }
 
     /**
-     * @param array $entry
+     * @param array<int|string, bool|float|int|string|null> $entry
      * @return void
      * @throws rex_sql_exception
      */
@@ -196,12 +205,17 @@ class PasswordLessLogin extends rex_backend_login
     /**
      * login
      *
-     * @param array $entry
+     * @param array<int|string, bool|float|int|string|null> $entry
      * @return void
      * @throws rex_exception
      */
     private static function login(array $entry): void {
         $user = rex_user::get((int) $entry['user_id']);
+
+        if ($user === null) {
+            throw new rex_exception('Invalid User');
+        }
+
         $sql = rex_sql::factory();
         self::startSession();
         self::regenerateSessionId();
@@ -212,13 +226,12 @@ class PasswordLessLogin extends rex_backend_login
         $sql->setQuery('UPDATE ' . rex::getTable('user') . ' SET login_tries=0, lasttrydate=?, lastlogin=?, session_id=? WHERE login=? LIMIT 1', $params);
         self::deleteEntry($entry);
         rex_response::sendRedirect(rex_url::backend());
-        exit();
     }
 
     /**
      * get the login url
      *
-     * @param array $entry
+     * @param array<int|string, bool|float|int|string|null> $entry
      * @return string
      */
     private static function getUrl(array $entry) {
@@ -229,7 +242,7 @@ class PasswordLessLogin extends rex_backend_login
     /**
      * send a mail to the user...
      *
-     * @param array $entry
+     * @param array<int|string, bool|float|int|string|null> $entry
      * @return void
      * @throws \PHPMailer\PHPMailer\Exception
      * @throws rex_exception
@@ -240,13 +253,18 @@ class PasswordLessLogin extends rex_backend_login
         $mailBody = $mailFragment->parse('pll-mail.php');
 
         $user = rex_user::get((int) $entry['user_id']);
+
+        if ($user === null) {
+            throw new rex_exception('Invalid User');
+        }
+
         $mailer = new rex_mailer();
         $mailer->isHTML(true);
         $mailer->Subject = rex::getServerName();
         $mailer->Body = $mailBody;
         $mailer->FromName = rex::getServerName();
         $mailer->addAddress($user->getEmail());
-        $mailer->Send();
+        $mailer->send();
 
         header('Ok', true, 200);
         exit();
