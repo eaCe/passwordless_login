@@ -21,4 +21,9 @@
     <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace" />
   </rule>
 
+  <!-- Ignore LineLength -->
+  <rule ref="Zend">
+    <exclude name="Generic.Files.LineLength"/>
+  </rule>
+
 </ruleset>
