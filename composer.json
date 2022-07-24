@@ -3,10 +3,10 @@
   "description": "Passwordless login for REDAXO 5",
   "license": "MIT",
   "scripts": {
-    "lint": "phplint --no-cache lib",
+    "lint": "phplint ./ --exclude=vendor --no-cache lib",
     "phpcs": "phpcs --extensions=php --standard=phpcs.xml lib",
     "phpcbf": "phpcbf --extensions=php --standard=phpcs.xml lib",
-    "test": "phpunit tests/"
+    "test": "phpunit tests/ --do-not-cache-result --colors=always"
   },
   "autoload-dev": {
     "classmap": [
