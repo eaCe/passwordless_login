@@ -21,9 +21,9 @@ Die Zugriffsrechte der User sind stark beschränkt.
 
 ## Installation
 
-> **Installationsvoraussetzung:** Stelle sicher, dass PHPMailer in REDAXO installiert, aktiviert und ordnungsgemäß eingerichtet ist. [Weitere Informationen auf redaxo.org](https://www.redaxo.org/doku/main/addon-phpmailer)
+> **Installationsvoraussetzung:** Stelle sicher, dass ***PHPMailer*** in REDAXO installiert, aktiviert und ordnungsgemäß eingerichtet ist. [Weitere Informationen auf redaxo.org](https://www.redaxo.org/doku/main/addon-phpmailer)
 
-Im REDAXO-Installer das Addon `passwordless_login` herunterladen und installieren. Das Addon verfügt über keine eigene Einstellungsseite.
+~Im REDAXO-Installer das Addon `passwordless_login`,~ alternativ die aktuellste Beta-Version auf [GitHub](../../tree/master) herunterladen und installieren. Das Addon verfügt über keine eigene Einstellungsseite.
 
 Ein Formular für den E-Mail Versand einrichten. Die Formular-Methode muss Post sein und die Action auf die gesetzte Route verweisen, im Normalfall `/pll`. Weiter benötigt es ein email-Input.
 
