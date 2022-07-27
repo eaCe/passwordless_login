@@ -29,7 +29,8 @@ Ein Formular für den E-Mail Versand einrichten. Die Formular-Methode muss Post 
 
 ```php
 <form action="<?= rex_url::frontend('pll') ?>" method="post">
-    <input type="email" name="email">
+    <label for="email">E-Mail Adresse</label>
+    <input id="email" type="email" name="email" placeholder="email@mustermail.de">
     <button type="submit">Senden</button>
 </form>
 ```
