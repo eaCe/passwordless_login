@@ -25,4 +25,3 @@ installer_ignore:
     - phpcs.xml
     - tests
     - .tools
-secret: 92d894ea9517fdf47074f786b34661ebcf18643992205d319373f4f1215ebdf5

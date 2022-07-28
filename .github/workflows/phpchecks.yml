@@ -28,12 +28,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Remove secret from package.yml
-        id: removeSecretFromPackage
-        uses: mikefarah/yq@master
-        with:
-          cmd: yq 'del(.secret)' 'package.yml'
-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
