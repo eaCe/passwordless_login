@@ -14,7 +14,7 @@ rex_sql_table::get(rex::getTable($this->getName()))
     ->ensureColumn(new rex_sql_column('expiration', 'datetime', false))
     ->ensure();
 
-if (!$this->getProperty('secret')) {
+if ($this->getProperty('secret') === null) {
     $yaml = array_merge(rex_file::getConfig($this->getPath() . rex_package::FILE_PACKAGE), array('secret' => bin2hex(random_bytes(32))));
     rex_file::putConfig($this->getPath() . rex_package::FILE_PACKAGE, $yaml);
 }
