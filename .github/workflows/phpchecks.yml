@@ -66,7 +66,8 @@ jobs:
 
       # copy Addon files, ignore some directories...
       # install phpmailer
-      # install ${{ github.event.repository.name }}
+      # install the addon
+      # if the addon name does not match the repository name, ${{ github.event.repository.name }} must be replaced with the addon name
       - name: Copy to Addons
         run: |
           rsync -av --exclude='vendor' --exclude='.github' --exclude='.git' --exclude='.tools' './' 'vendor/redaxo/source/redaxo/src/addons/${{ github.event.repository.name }}'
