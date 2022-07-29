@@ -228,14 +228,15 @@ class PasswordLessLogin extends rex_backend_login
         }
 
         $sql = rex_sql::factory();
+        $sessionNamespace = static::getSessionNamespace();
         self::startSession();
         self::regenerateSessionId();
         /** @phpstan-ignore-next-line */
-        $_SESSION[static::getSessionNamespace()]['backend_login']['UID'] = $user->getValue('id');
+        $_SESSION[$sessionNamespace]['backend_login']['UID'] = $user->getValue('id');
         /** @phpstan-ignore-next-line */
-        $_SESSION[static::getSessionNamespace()]['backend_login']['password'] = $user->getValue('password');
+        $_SESSION[$sessionNamespace]['backend_login']['password'] = $user->getValue('password');
         /** @phpstan-ignore-next-line */
-        $_SESSION[static::getSessionNamespace()]['backend_login']['STAMP'] = time();
+        $_SESSION[$sessionNamespace]['backend_login']['STAMP'] = time();
         $params = [rex_sql::datetime(), rex_sql::datetime(), session_id(), $user->getLogin()];
         $sql->setQuery('UPDATE ' . rex::getTable('user') . ' SET login_tries=0, lasttrydate=?, lastlogin=?, session_id=? WHERE login=? LIMIT 1', $params);
         self::deleteEntry($entry);
