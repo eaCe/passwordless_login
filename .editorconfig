@@ -5,7 +5,7 @@ root = true
 [*]
 indent_style = space
 indent_size = 2
-end_of_line = lf
+end_of_line = crlf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
@@ -16,9 +16,13 @@ ij_php_special_else_if_treatment = false
 ij_any_special_else_if_treatment = false
 ij_php_block_brace_style = end_of_line
 ij_php_class_brace_style = next_line
+ij_php_method_brace_style = next_line
+ij_php_anonymous_brace_style = end_of_line
+ij_php_catch_on_new_line = true
+ij_php_else_on_new_line = true
+ij_php_finally_on_new_line = true
 ij_php_for_brace_force = always
 ij_php_if_brace_force = never
-ij_php_method_brace_style = next_line
 ij_php_space_after_type_cast = true
 ij_php_space_after_colon_in_return_type = true
 ij_php_blank_lines_after_imports = 1
@@ -40,4 +44,3 @@ ij_any_else_on_new_line = false
 
 [*.html]
 indent_size = 4
-
