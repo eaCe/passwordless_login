@@ -87,9 +87,9 @@ jobs:
 
       - name: Install test dependencies
         working-directory: vendor/redaxo/source/redaxo/src/addons/${{ github.event.repository.name }}
-        run: |
-          composer install --prefer-dist --no-progress --no-suggest
-          composer remove redaxo/source
+        env:
+          COMPOSER: composer-test.json
+        run: composer install --prefer-dist --no-progress
 
       - name: Run lint
         working-directory: vendor/redaxo/source/redaxo/src/addons/${{ github.event.repository.name }}
