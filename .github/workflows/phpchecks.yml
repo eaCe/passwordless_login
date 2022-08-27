@@ -89,7 +89,7 @@ jobs:
         working-directory: vendor/redaxo/source/redaxo/src/addons/${{ github.event.repository.name }}
         run: |
           composer install --prefer-dist --no-progress --no-suggest
-          composer unsinstall redaxo/source
+          composer remove redaxo/source
 
       - name: Run lint
         working-directory: vendor/redaxo/source/redaxo/src/addons/${{ github.event.repository.name }}
