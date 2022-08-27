@@ -63,6 +63,11 @@ jobs:
           git apply .github/workflows/default.config.yml.github-action.diff
           php .tools/bin/setup
           vendor/redaxo/source/redaxo/bin/console system:report
+          
+      - name: Create user, update config
+        run: |
+            php vendor/redaxo/source/redaxo/bin/console user:create myusername mypassword --admin --ansi
+            php vendor/redaxo/source/redaxo/bin/console config:set error_email 'test@redaxo.invalid' --ansi
 
       # copy Addon files, ignore some directories...
       # install phpmailer
