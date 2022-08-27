@@ -64,11 +64,15 @@ jobs:
           php .tools/bin/setup
           vendor/redaxo/source/redaxo/bin/console system:report
           
-      - name: Create user, update config, run setup
+      - name: Create user, update config
         run: |
             php vendor/redaxo/source/redaxo/bin/console user:create myusername mypassword --admin --ansi
             php vendor/redaxo/source/redaxo/bin/console config:set error_email 'test@redaxo.invalid' --ansi
-            php vendor/redaxo/source/redaxo/bin/console setup:run -n --lang=de_de --agree-license --db-password=root --admin-username=myusername --admin-password=mypassword --ansi
+            
+      - name: Import mock data
+        run: |
+            mkdir -p $GITHUB_WORKSPACE/vendor/redaxo/source/redaxo/data/addons/backup && cp -r .github/inital-content.sql $GITHUB_WORKSPACE/vendor/redaxo/source/redaxo/data/addons/backup/
+            php vendor/redaxo/source/redaxo/bin/console setup:run -n --lang=de_de --agree-license --db-password=root --db-setup=import --db-import=inital-content-for-visual-tests --admin-username=myusername --admin-password=mypassword --ansi
 
       # copy Addon files, ignore some directories...
       # install phpmailer
