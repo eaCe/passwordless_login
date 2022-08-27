@@ -16,14 +16,14 @@ jobs:
     permissions:
       contents: write  # for Git to git apply
 
-    services:
-      mysql:
-        image: 'mariadb:10.1'
-        env:
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+#     services:
+#       mysql:
+#         image: 'mariadb:10.1'
+#         env:
+#           MYSQL_ROOT_PASSWORD: root
+#         ports:
+#           - 3306:3306
+#         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - uses: actions/checkout@v3
@@ -34,6 +34,10 @@ jobs:
           php-version: '8.0'
           extensions: gd, intl, pdo_mysql
           coverage: none # disable xdebug, pcov
+          
+      - name: Init database
+        run: |
+            sudo /etc/init.d/mysql start
 
       - name: Validate composer.json and composer.lock
         run: composer validate
