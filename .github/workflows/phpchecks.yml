@@ -54,9 +54,6 @@ jobs:
       - name: Setup Problem Matchers for PHPUnit
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-#      - name: Try to log config...
-#        run: less vendor/redaxo/source/redaxo/src/core/default.config.yml
-
       - name: Setup REDAXO
         run: |
           mysql -uroot -h127.0.0.1 -proot -e 'create database redaxo5;'
