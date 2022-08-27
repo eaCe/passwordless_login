@@ -1,6 +1,6 @@
 {
-  "name": "eace/transient",
-  "description": "rex_config with expiration date for REDAXO 5",
+  "name": "eace/passwordless_login",
+  "description": "Passwordless login for REDAXO 5",
   "license": "MIT",
   "scripts": {
     "lint": "phplint ./ --exclude=vendor --no-cache lib",
@@ -10,7 +10,7 @@
   },
   "autoload-dev": {
     "classmap": [
-      "lib/rex_transient.php"
+      "lib/PasswordLessLogin.php"
     ]
   },
   "require-dev": {
