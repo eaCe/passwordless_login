@@ -1,15 +1,13 @@
 <?php
 
-chdir(dirname(__DIR__).'/vendor/redaxo/source/redaxo');
-
 unset($REX);
 $REX['REDAXO'] = true;
-$REX['HTDOCS_PATH'] = '../';
+$REX['HTDOCS_PATH'] = '../../../../';
 $REX['BACKEND_FOLDER'] = 'redaxo';
 $REX['LOAD_PAGE'] = false;
 
-require dirname(__DIR__).'/vendor/redaxo/source/redaxo/src/core/boot.php';
-require dirname(__DIR__).'/vendor/redaxo/source/redaxo/src/core/packages.php';
+require __DIR__.'../../../../core/boot.php';
+require __DIR__.'../../../../core/packages.php';
 
 // use original error handlers of the tools
 rex_error_handler::unregister();

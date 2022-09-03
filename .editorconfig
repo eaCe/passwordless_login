@@ -5,7 +5,7 @@ root = true
 [*]
 indent_style = space
 indent_size = 2
-end_of_line = crlf
+end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
@@ -39,7 +39,7 @@ ij_php_align_phpdoc_param_names = false
 ij_php_import_sorting = alphabetic
 ij_php_blank_lines_after_class_header = 0
 ij_php_blank_lines_before_class_end = 0
-ij_php_else_if_style = separate
+ij_php_else_if_style = combine
 ij_any_else_on_new_line = false
 
 [*.html]
