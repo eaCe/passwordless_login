@@ -11,9 +11,11 @@ final class PasswordLessLoginTest extends TestCase
      */
     public function testRouteEP(): void
     {
-        PasswordLessLogin::$route = rex_extension::registerPoint(new rex_extension_point('PLL_ROUTE', 'test-route'));
-        PasswordLessLogin::$loginRoute = rex_extension::registerPoint(new rex_extension_point('PLL_LOGIN_ROUTE', 'test-login-route'));
+        PasswordLessLogin::$route = \rex_extension::registerPoint(new \rex_extension_point('PLL_ROUTE', 'test-route'));
+        PasswordLessLogin::$loginRoute = \rex_extension::registerPoint(new \rex_extension_point('PLL_LOGIN_ROUTE', 'test-login-route'));
 
+        \rex_config::set('testns', 'testeky', 'test');
+        
         $this::assertSame('test-route', PasswordLessLogin::$route);
         $this::assertSame('test-login-route', PasswordLessLogin::$loginRoute);
     }
@@ -26,7 +28,7 @@ final class PasswordLessLoginTest extends TestCase
      */
     public function testWrongLoginRequestMethod(): void
     {
-        $this->expectException(rex_exception::class);
+        $this->expectException(\rex_exception::class);
         PasswordLessLogin::$loginRoute = 'pll';
         $_SERVER['REQUEST_URI'] = '/pll/';
         $_SERVER['REQUEST_METHOD'] = 'POST';
@@ -42,7 +44,7 @@ final class PasswordLessLoginTest extends TestCase
      */
     public function testMissingLoginHash(): void
     {
-        $this->expectException(rex_exception::class);
+        $this->expectException(\rex_exception::class);
         PasswordLessLogin::$loginRoute = 'pll';
         $_SERVER['REQUEST_URI'] = '/pll/';
         $_SERVER['REQUEST_METHOD'] = 'GET';
@@ -58,7 +60,7 @@ final class PasswordLessLoginTest extends TestCase
      */
     public function testMissingLoginSecret(): void
     {
-        $this->expectException(rex_exception::class);
+        $this->expectException(\rex_exception::class);
         PasswordLessLogin::$loginRoute = 'pll';
         $_SERVER['REQUEST_URI'] = '/pll/';
         $_SERVER['REQUEST_METHOD'] = 'GET';
