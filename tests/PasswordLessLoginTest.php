@@ -110,4 +110,14 @@ final class PasswordLessLoginTest extends TestCase
 
         PasswordLessLogin::handleSubmit();
     }
+
+    /**
+     * @return void
+     */
+    public function testGetCurrentPath(): void
+    {
+        $_SERVER['REQUEST_URI'] = 'test-route';
+        
+        $this::assertSame('test-route', str_replace('/', '', PasswordLessLogin::getCurrentPath()));
+    }
 }
