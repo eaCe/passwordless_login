@@ -281,6 +281,7 @@ class PasswordLessLogin extends rex_backend_login
         // @codingStandardsIgnoreStart
         $mailer->Subject = rex::getServerName();
         $mailer->Body = $mailBody;
+        $mailer->AltBody = strip_tags($mailBody);
         $mailer->FromName = rex::getServerName();
         // @codingStandardsIgnoreEnd
 
