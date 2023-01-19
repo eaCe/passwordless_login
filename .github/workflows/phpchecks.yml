@@ -26,6 +26,21 @@ jobs:
           extensions: gd, intl, pdo_mysql
           coverage: none # disable xdebug, pcov
 
+      # Cache dependencies. From:
+      # https://github.com/actions/cache/blob/master/examples.md#python---pip
+      - uses: actions/cache@v3
+        with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gem-${{ hashFiles('Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gem-
+
+      - name: Install ruby, install mailcatcher
+        run: |
+          sudo apt-get install ruby-full
+          gem install mailcatcher
+          mailcatcher
+
       # credits https://blog.markvincze.com/download-artifacts-from-a-latest-github-release-in-sh-and-powershell/
       - name: Download latest REDAXO release
         run: |
