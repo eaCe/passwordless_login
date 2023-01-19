@@ -30,10 +30,10 @@ jobs:
       # https://github.com/actions/cache/blob/master/examples.md#python---pip
       - uses: actions/cache@v3
         with:
-        path: vendor/bundle
-        key: ${{ runner.os }}-gem-${{ hashFiles('Gemfile.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-gem-
+          path: vendor/bundle
+          key: ${{ runner.os }}-gem-${{ hashFiles('Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gem-
 
       - name: Install ruby, install mailcatcher
         run: |
