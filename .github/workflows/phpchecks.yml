@@ -37,7 +37,7 @@ jobs:
 
       - name: Install ruby, install mailcatcher
         run: |
-          gem install mailcatcher
+          sudo gem install mailcatcher
           mailcatcher
 
       # credits https://blog.markvincze.com/download-artifacts-from-a-latest-github-release-in-sh-and-powershell/
