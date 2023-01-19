@@ -37,7 +37,7 @@ jobs:
 
       - name: Install ruby, install mailcatcher
         run: |
-          sudo apt-get install ruby-full
+#          sudo apt-get install ruby-full
           gem install mailcatcher
           mailcatcher
 
